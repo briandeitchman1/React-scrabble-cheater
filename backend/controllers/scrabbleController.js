@@ -1,32 +1,67 @@
+const asyncHandler = require("express-async-handler");
+const FavoriteWord = require("../models/favoriteWordModel")
+const WordsDB = require("../models/wordsDB");
 // @desc Get words
 // @route Get /api/scrabble
 // @access public
-const getWords = (req, res) => {
-    res.status(200).json({ message: 'Get words' })
-}
+const getWords = asyncHandler(async (req, res) => {
+
+    words = await WordsDB.find({ key: "AABCORT" })
+    res.status(200).json(words)
+})
+// @desc Get Favorite word
+// @route Get /api/scrabble/fav
+// @access public
+const getFavWords = asyncHandler(async (req, res) => {
+
+    favoriteWords = await FavoriteWord.find({})
+    res.status(200).json(favoriteWords)
+})
 // @desc Add word to favorites list
 // @route POST /api/scrabble
 // @access private
-const addFavoriteWord = (req, res) => {
-    res.status(200).json({ message: 'Added favorite word' })
-}
+const addFavoriteWord = asyncHandler(async (req, res) => {
+
+    if (!req.body.text) {
+        res.status(400);
+        throw new Error('Please add a text field');
+    }
+    const favoriteWord = await FavoriteWord.create({
+        word: req.body.text
+    })
+    res.status(200).json({ favoriteWord })
+})
 // @desc update word in favorites list
 // @route update /api/scrabble/:id
 // @access private
-const updateFavoriteWord = (req, res) => {
-    res.status(200).json({ message: `updated word ${req.params.id}` })
-}
+const updateFavoriteWord = asyncHandler(async (req, res) => {
+    const favoriteWord = await FavoriteWord.findById(req.params.id)
+    if (!favoriteWord) {
+        res.status(400)
+        throw new Error('Word not found')
+    }
+    favoriteWord.word = req.body.text;
+    favoriteWord.save();
+    res.status(200).json({ message: favoriteWord })
+})
 // @desc  delete word in favorites list
 // @route DELETE /api/scrabble/:id
 // @access private
-const deleteFavoriteWord = (req, res) => {
-    res.status(200).json({ message: `deleted word ${req.params.id}` })
-}
+const deleteFavoriteWord = asyncHandler(async (req, res) => {
+    const favoriteWord = await FavoriteWord.findById(req.params.id)
+    if (!favoriteWord) {
+        res.status(400)
+        throw new Error('Word not found')
+    }
+    await favoriteWord.remove()
+    res.status(200).json({ id: req.params.id })
+})
 
 module.exports = {
     getWords,
     addFavoriteWord,
     updateFavoriteWord,
-    deleteFavoriteWord
+    deleteFavoriteWord,
+    getFavWords
 
 }

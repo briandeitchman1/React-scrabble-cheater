@@ -1,19 +1,34 @@
 const asyncHandler = require("express-async-handler");
 const FavoriteWord = require("../models/favoriteWordModel")
 const WordsDB = require("../models/wordsDB");
+const Words = require("./wordListDB");
+
+
+
 // @desc Get words
 // @route Get /api/scrabble
 // @access public
 const getWords = asyncHandler(async (req, res) => {
+    // let key = req.query.letters.toUpperCase();
+    // const sortedKey = key.split('').sort().join('')
 
-    words = await WordsDB.find({ key: "AABCORT" })
-    res.status(200).json(words)
+    // words = await WordsDB.find({ key: sortedKey })
+    // if (!words) {
+    //     res.status(400)
+    //     throw new Error('Word not found')
+    // }
+    // res.status(200).json(words)
+    let list = Words.getWords(req.query.letters)
+    console.log(list)
+    res.status(200).json({ list })
 })
 // @desc Get Favorite word
 // @route Get /api/scrabble/fav
 // @access public
 const getFavWords = asyncHandler(async (req, res) => {
-
+    let key = req.query.letters.toUpperCase();
+    const sortedKey = key.split('').sort().join('')
+    console.log(sortedKey)
     favoriteWords = await FavoriteWord.find({})
     res.status(200).json(favoriteWords)
 })

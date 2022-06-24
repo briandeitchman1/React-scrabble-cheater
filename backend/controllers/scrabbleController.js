@@ -19,6 +19,10 @@ const getWords = asyncHandler(async (req, res) => {
     // }
     // res.status(200).json(words)
     let list = Words.getWords(req.query.letters)
+    if (!list) {
+        res.status(400).json({})
+        // throw new Error('No words found')
+    }
     console.log(list)
     res.status(200).json({ list })
 })
@@ -26,9 +30,6 @@ const getWords = asyncHandler(async (req, res) => {
 // @route Get /api/scrabble/fav
 // @access public
 const getFavWords = asyncHandler(async (req, res) => {
-    let key = req.query.letters.toUpperCase();
-    const sortedKey = key.split('').sort().join('')
-    console.log(sortedKey)
     favoriteWords = await FavoriteWord.find({})
     res.status(200).json(favoriteWords)
 })

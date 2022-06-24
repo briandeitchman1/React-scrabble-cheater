@@ -6,8 +6,6 @@ const map = new Map();
 
 function createWordMap() {
     const words = fs.readFileSync('backend/controllers/wordList.txt', 'utf-8').toString().split('\r\n');
-    console.log(words.length);
-    //const map = new Map();
     for (let i = 0; i < words.length; i++) {
         let sortedWord = words[i].split('').sort().join("");
         if (!map.has(sortedWord)) {
@@ -23,28 +21,35 @@ createWordMap();
 Words.map = map;
 
 Words.getWords = function getAllWords(word) {
+    if (!word) {
+        return ''
+    }
     word = word.toUpperCase()
     const sortedWord = word.split('').sort().join('');
     const searchedLetters = []
     let scrabbleAnswers = []
     searchedLetters.concat(map.get(sortedWord));
-    findShorterWords(map, sortedWord, sortedWord, searchedLetters, scrabbleAnswers)
+    findShorterWords(map, sortedWord, searchedLetters, scrabbleAnswers)
     return scrabbleAnswers;
 }
-function findShorterWords(map, newKey, originalKey, searchedLetters, scrabbleAnswers) {
+function findShorterWords(map, newKey, searchedLetters, scrabbleAnswers) {
     //console.log(newKey);
     if (newKey <= 0) {
         return;
     }
-    if (newKey != originalKey && map.get(newKey)) {
+    if (map.get(newKey)) {
         //console.log(map.get(newKey))
-        scrabbleAnswers.push(map.get(newKey));
+        tempWords = map.get(newKey);
+        for (let i = 0; i < tempWords.length; i++) {
+            scrabbleAnswers.push(tempWords[i]);
+        }
+        //scrabbleAnswers.push(map.get(newKey));
     }
     for (let i = 0; i < newKey.length; i++) {
         let cutKey = newKey.substring(0, i) + newKey.substring(i + 1, newKey.length);
         if (!searchedLetters.includes(cutKey)) {
             searchedLetters.push(cutKey)
-            findShorterWords(map, cutKey, originalKey, searchedLetters, scrabbleAnswers);
+            findShorterWords(map, cutKey, searchedLetters, scrabbleAnswers);
         }
     }
 }

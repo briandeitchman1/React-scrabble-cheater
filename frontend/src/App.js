@@ -3,13 +3,14 @@ import React, { useState } from 'react';
 import Dashboard from './pages/Dashboard';
 import Favorites from './pages/Favorites';
 import Header from './components/Header';
-import Button from './components/Button';
 
 
+//"http://localhost:5000/scrabble
+const apiURL = "https://reactscrabblecheater.herokuapp.com/scrabble"
 
 function App() {
   const getFavs = () => {
-    fetch("http://localhost:5000/scrabble/fav")
+    fetch(apiURL + "/fav")
       .then(res => res.json())
       .then(data => {
         console.log(data)
@@ -27,7 +28,7 @@ function App() {
       console.log("in get Words")
       return;
     }
-    fetch("http://localhost:5000/scrabble", {
+    fetch(apiURL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -40,6 +41,7 @@ function App() {
     })
       .then(data => console.log(data))
       .catch(err => console.log('Error'))
+    getFavs();
   }
 
   const deleteFav = () => {
@@ -48,7 +50,7 @@ function App() {
       console.log("in get Words")
       return;
     }
-    fetch("http://localhost:5000/scrabble", {
+    fetch(apiURL, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
@@ -61,6 +63,7 @@ function App() {
     })
       .then(data => console.log(data))
       .catch(err => console.log('Error'))
+    getFavs();
   }
   const getWords = async () => {
     if (!input) {
@@ -69,11 +72,11 @@ function App() {
       return;
     }
     if (input.length > 7) {
-      await setInput(input.slice(0, 7))
+      await setInput(input.slice(0, 9))
     }
     console.log(input)
-    fetch("http://localhost:5000/scrabble/words?" + new URLSearchParams({
-      letters: input.slice(0, 7)
+    fetch(apiURL + "/words?" + new URLSearchParams({
+      letters: input.slice(0, 9)
     }))
       .then(res => res.json())
       .then(data => {

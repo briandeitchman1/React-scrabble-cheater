@@ -1,5 +1,6 @@
 import React from 'react'
 import Word from './Word'
+
 const Display = ({ words }) => {
     const wordsList = []
     words.forEach((word, index) => {
@@ -8,7 +9,7 @@ const Display = ({ words }) => {
 
     })
     return (
-        <div>
+        <div className='display' style={{ columnCount: 1, columnRuleWidth: 3, columnRuleStyle: "solid", columnRuleColor: "lightblue", columnFill: "balance" }}>
             {wordsList}
         </div>
 

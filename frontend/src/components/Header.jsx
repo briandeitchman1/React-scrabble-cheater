@@ -8,6 +8,7 @@ function Header({ }) {
             <div className="logo">
                 <Link to='/'>Get Words</Link>
             </div>
+            <a href="http://www.briandeitchman.com">My website</a>
             <div className="logo">
                 <Link to='/fav'>Favorite Words</Link>
             </div>

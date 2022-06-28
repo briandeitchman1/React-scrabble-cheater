@@ -5,7 +5,7 @@ import Favorites from './pages/Favorites';
 import Header from './components/Header';
 
 
-//"http://localhost:5000/scrabble
+//const apiURL = "http://localhost:5000/scrabble
 const apiURL = "https://reactscrabblecheater.herokuapp.com/scrabble"
 
 function App() {

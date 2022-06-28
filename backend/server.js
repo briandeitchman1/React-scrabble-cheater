@@ -18,7 +18,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/scrabble', require('./routes/scrabbleRoutes'));
+app.use('/api/scrabble', require('./routes/scrabbleRoutes'));
 
 //Serve frontend
 if (process.env.NODE_ENV === 'production') {

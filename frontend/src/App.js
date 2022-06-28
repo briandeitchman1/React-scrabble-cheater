@@ -4,40 +4,97 @@ import Dashboard from './pages/Dashboard';
 import Favorites from './pages/Favorites';
 import Header from './components/Header';
 import Button from './components/Button';
-//import { getWords } from '../../backend/controllers/scrabbleController';
+
+
 
 function App() {
   const getFavs = () => {
     fetch("http://localhost:5000/scrabble/fav")
       .then(res => res.json())
-      .then(data => console.log(data))
+      .then(data => {
+        console.log(data)
+        const favWordsList = []
+        data.forEach(datum => {
+          favWordsList.push(datum.word);
+        })
+        setWords(favWordsList)
+      })
   }
-  const getWords = () => {
+
+  const addFav = () => {
+    if (!input) {
+      setInput("Must Type at least 1 letter")
+      console.log("in get Words")
+      return;
+    }
+    fetch("http://localhost:5000/scrabble", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        text: input
+      })
+    }).then(res => {
+      return res.json
+    })
+      .then(data => console.log(data))
+      .catch(err => console.log('Error'))
+  }
+
+  const deleteFav = () => {
+    if (!input) {
+      setInput("Must Type at least 1 letter")
+      console.log("in get Words")
+      return;
+    }
+    fetch("http://localhost:5000/scrabble", {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        text: input
+      })
+    }).then(res => {
+      return res.json
+    })
+      .then(data => console.log(data))
+      .catch(err => console.log('Error'))
+  }
+  const getWords = async () => {
+    if (!input) {
+      setInput("Must Type at least 1 letter")
+      console.log("in get Words")
+      return;
+    }
+    if (input.length > 7) {
+      await setInput(input.slice(0, 7))
+    }
+    console.log(input)
     fetch("http://localhost:5000/scrabble/words?" + new URLSearchParams({
-      letters: input
+      letters: input.slice(0, 7)
     }))
       .then(res => res.json())
       .then(data => {
         if (!data) {
           console.log("no words found")
         }
-        // const list = []
-        // for (let i = 0; i < data.list.length; i++) {
-        //   //console.log(data.list[i])
-        //   for (let word in data.list[i]) {
-        //     list.push(word);
-        //   }
-        // }
-        // console.log(list)
+
         setWords(data.list);
 
         console.log(data.list)
       })
   }
+
+  const resetWordsState = () => {
+    setWords("")
+  }
+
   const handleChange = event => {
     setInput(event.target.value)
   }
-  const [words, setWords] = useState(["yo"]);
+  const [words, setWords] = useState([""]);
   const [input, setInput] = useState("")
   return (
     <>
@@ -45,15 +102,13 @@ function App() {
         <div className='container'>
           <Header />
           <Routes>
-            <Route path='/' element={<Dashboard />} />
-            <Route path='/fav' element={<Favorites />} />
+            <Route path='/' element={<Dashboard words={words} getWords={getWords} />} />
+            <Route path='/fav' element={<Favorites getFavs={getFavs} words={words} addFav={addFav} deleteFav={deleteFav} />} />
           </Routes>
-          <textarea name="" id="" cols="30" rows="10" value={words}></textarea>
 
-          <p>Type your letters here</p>
           <input type="text" name="" id="" value={input} onChange={handleChange} />
-          <Button text={"Get Favs"} onClick={getFavs} />
-          <Button text={"Get Words"} onClick={getWords} />
+
+
 
         </div>
       </Router>

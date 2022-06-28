@@ -9,15 +9,6 @@ const Words = require("./wordListDB");
 // @route Get /api/scrabble
 // @access public
 const getWords = asyncHandler(async (req, res) => {
-    // let key = req.query.letters.toUpperCase();
-    // const sortedKey = key.split('').sort().join('')
-
-    // words = await WordsDB.find({ key: sortedKey })
-    // if (!words) {
-    //     res.status(400)
-    //     throw new Error('Word not found')
-    // }
-    // res.status(200).json(words)
     let list = Words.getWords(req.query.letters)
     if (!list) {
         res.status(400).json({})
@@ -64,12 +55,13 @@ const updateFavoriteWord = asyncHandler(async (req, res) => {
 // @route DELETE /api/scrabble/:id
 // @access private
 const deleteFavoriteWord = asyncHandler(async (req, res) => {
-    const favoriteWord = await FavoriteWord.findById(req.params.id)
+    //const favoriteWord = await FavoriteWord.findById(req.params.id)
+    const favoriteWord = await FavoriteWord.deleteMany({ word: req.body.text })
     if (!favoriteWord) {
         res.status(400)
         throw new Error('Word not found')
     }
-    await favoriteWord.remove()
+    // await favoriteWord.remove()
     res.status(200).json({ id: req.params.id })
 })
 

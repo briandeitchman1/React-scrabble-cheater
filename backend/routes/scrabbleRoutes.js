@@ -5,7 +5,7 @@ const { getWords, addFavoriteWord, updateFavoriteWord, deleteFavoriteWord, getFa
 router.route('/words').get(getWords)
 router.route('/').post(addFavoriteWord);
 //router.route('/').get(getWords).post(addFavoriteWord);
-router.route('/:id').put(updateFavoriteWord).delete(deleteFavoriteWord);
+router.route('/').put(updateFavoriteWord).delete(deleteFavoriteWord);
 router.route('/fav').get(getFavWords)
 
 

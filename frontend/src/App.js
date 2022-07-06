@@ -4,9 +4,8 @@ import Dashboard from './pages/Dashboard';
 import Favorites from './pages/Favorites';
 import Header from './components/Header';
 
-
-const apiURL = "http://localhost:5000/api/scrabble"
-//const apiURL = "https://reactscrabblecheater.herokuapp.com/api/scrabble"
+//const apiURL = "http://localhost:5100/api/scrabble"
+const apiURL = "https://reactscrabblecheater.herokuapp.com/api/scrabble"
 
 function App() {
   const getFavs = () => {
@@ -89,10 +88,6 @@ function App() {
 
         console.log(data.list)
       })
-  }
-
-  const resetWordsState = () => {
-    setWords("")
   }
 
   const handleChange = event => {

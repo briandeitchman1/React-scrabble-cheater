@@ -8,6 +8,7 @@ const apiURL = "http://localhost:5000/api/scrabble"
 //const apiURL = "https://reactscrabblecheater.herokuapp.com/api/scrabble"
 
 function App() {
+  // uses fetch to get the list of favorite words from the backend.
   const getFavs = () => {
     fetch(apiURL + "/fav")
       .then(res => res.json())
@@ -21,7 +22,7 @@ function App() {
       })
     console.log(window.location.origin)
   }
-
+  // uses sends a post request to the back end to add a new favorite word
   const addFav = () => {
     if (!input) {
       setInput("Must Type at least 1 letter")
@@ -43,7 +44,7 @@ function App() {
       .catch(err => console.log('Error'))
     getFavs();
   }
-
+  // Sends a delete request to remove a word from the favorite words list
   const deleteFav = () => {
     if (!input) {
       setInput("Must Type at least 1 letter")
@@ -65,10 +66,11 @@ function App() {
       .catch(err => console.log('Error'))
     getFavs();
   }
+  // sends get request with a query string of users inputed letters
+  // the response is all possible word combonations with those letters
   const getWords = async () => {
     if (!input) {
       setInput("Must Type at least 1 letter")
-      console.log("in get Words")
       return;
     }
     if (input.length > 7) {
@@ -89,7 +91,7 @@ function App() {
         console.log(data.list)
       })
   }
-
+  //updates the input field
   const handleChange = event => {
     setInput(event.target.value)
   }

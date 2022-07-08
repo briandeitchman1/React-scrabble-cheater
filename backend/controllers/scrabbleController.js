@@ -26,7 +26,7 @@ const getFavWords = asyncHandler(async (req, res) => {
 })
 // @desc Add word to favorites list
 // @route POST /api/scrabble
-// @access private
+// @access public
 const addFavoriteWord = asyncHandler(async (req, res) => {
 
     if (!req.body.text) {
@@ -61,7 +61,6 @@ const deleteFavoriteWord = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error('Word not found')
     }
-    // await favoriteWord.remove()
     res.status(200).json({ id: req.params.id })
 })
 

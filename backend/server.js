@@ -10,6 +10,7 @@ const port = process.env.PORT || 5000;
 connectDB();
 
 const app = express();
+// allowes requests from anyone
 app.use(cors({
     origin: "*",
 }))
